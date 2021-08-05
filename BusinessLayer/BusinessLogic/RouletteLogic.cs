@@ -1,19 +1,21 @@
 ﻿using BusinessLayer.Interfaces;
-using System;
+using DataAccess.Entities;
+using DataAccess.Interfaces;
 using System.Threading.Tasks;
 
 namespace BusinessLayer.BusinessLogic
 {
     public class RouletteLogic : IRouletteLogic
     {
-        public Task<int> NewRoulette()
+        private readonly IRouletteQuery _dnaSequenceQuery;
+        public RouletteLogic(IRouletteQuery rouletteQuery) => _dnaSequenceQuery = rouletteQuery;
+
+        public int NewRoulette(Roulette roulette)
         {
-            throw new NotImplementedException();
+            roulette.State = true;
+            return _dnaSequenceQuery.CreateRoulette(roulette);
+
         }
 
-        public Task<string> RouletteOpening(int idRoulette)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using DataAccess.Entities;
+using System.Threading.Tasks;
 
 namespace BusinessLayer.Interfaces
 {
     public interface IRouletteLogic
     {
-        Task<int> NewRoulette();
-        Task<string> RouletteOpening(int idRoulette);
+        int NewRoulette(Roulette roulette);
     }
 }

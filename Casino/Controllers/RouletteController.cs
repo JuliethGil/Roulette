@@ -1,7 +1,11 @@
-﻿using BusinessLayer.Interfaces;
+﻿using AutoMapper;
+using BusinessLayer.Interfaces;
+using Casino.Models;
+using DataAccess.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Net;
+using System.Net.Mime;
 using System.Threading.Tasks;
 
 namespace Casino.Controllers
@@ -21,15 +25,17 @@ namespace Casino.Controllers
         [DisableRequestSizeLimit]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        public async Task<IActionResult> NewRoulette()
+        [Produces(MediaTypeNames.Application.Json, Type = typeof(RouletteModel))]
+        public IActionResult NewRoulette([FromBody] RouletteModel request)
         {
             try
             {
-                int idRoulette = await _service.NewRoulette();
+                var objRequest = Mapper.Map<Roulette>(request);
+                int idRoulette = _service.NewRoulette(objRequest);
                     
                 return Ok(idRoulette);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return StatusCode((int)HttpStatusCode.Forbidden, null);
             }

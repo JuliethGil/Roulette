@@ -13,6 +13,12 @@ namespace Casino
     {
         public static void Main(string[] args)
         {
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMissingTypeMaps = true;
+                cfg.ValidateInlineMaps = false;
+            });
+
             CreateHostBuilder(args).Build().Run();
         }
 

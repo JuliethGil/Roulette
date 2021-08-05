@@ -1,6 +1,6 @@
 ﻿namespace DataAccess.Entities
 {
-    public partial class Roulette
+    public class Roulette
     {
         public int Id { get; set; }
         public string Name { get; set; }

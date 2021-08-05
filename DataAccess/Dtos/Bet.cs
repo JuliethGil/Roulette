@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DataAccess.Entities
 {
-    public partial class Bet
+    public class Bet
     {
         public int Id { get; set; }
         public int IdRoulette { get; set; }
