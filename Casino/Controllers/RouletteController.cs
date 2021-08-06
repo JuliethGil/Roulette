@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Net;
 using System.Net.Mime;
-using System.Threading.Tasks;
 
 namespace Casino.Controllers
 {
@@ -25,8 +24,8 @@ namespace Casino.Controllers
         [DisableRequestSizeLimit]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [Produces(MediaTypeNames.Application.Json, Type = typeof(RouletteModel))]
-        public IActionResult NewRoulette([FromBody] RouletteModel request)
+        [Produces(MediaTypeNames.Application.Json, Type = typeof(RouletteCreationModel))]
+        public IActionResult NewRoulette([FromBody] RouletteCreationModel request)
         {
             try
             {
@@ -35,11 +34,32 @@ namespace Casino.Controllers
                     
                 return Ok(idRoulette);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode((int)HttpStatusCode.Forbidden, null);
             }
 
+        }
+
+        [Route("rouletteopening")]
+        [HttpPut]
+        [DisableRequestSizeLimit]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Forbidden)]
+        [Produces(MediaTypeNames.Application.Json, Type = typeof(RouletteUpdateModel))]
+        public IActionResult RouletteOpening([FromBody] RouletteUpdateModel request)
+        {
+            try
+            {
+                var objRequest = Mapper.Map<Roulette>(request);
+                string state = _service.RouletteOpening(objRequest);
+
+                return Ok(state);
+            }
+            catch (Exception)
+            {
+                return StatusCode((int)HttpStatusCode.Forbidden, null);
+            }
         }
     }
 }

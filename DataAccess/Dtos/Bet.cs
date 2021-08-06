@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DataAccess.Entities
+﻿namespace DataAccess.Entities
 {
     public class Bet
     {
@@ -10,8 +6,6 @@ namespace DataAccess.Entities
         public int IdRoulette { get; set; }
         public int IdRouletteNumber { get; set; }
         public int IdBetGuy { get; set; }
-        public DateTime Opening { get; set; }
-        public DateTime Closing { get; set; }
         public int Result { get; set; }
     }
 }

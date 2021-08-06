@@ -5,5 +5,6 @@ namespace DataAccess.Interfaces
     public interface IRouletteQuery
     {
         int CreateRoulette(Roulette roulette);
+        bool UpdateOpeningRoulette(Roulette roulette);
     }
 }

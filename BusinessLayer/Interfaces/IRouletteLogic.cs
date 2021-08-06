@@ -5,7 +5,6 @@ namespace BusinessLayer.Interfaces
     public interface IRouletteLogic
     {
         int NewRoulette(Roulette roulette);
-        string RouletteOpening(int idRoulette);
-
+        string RouletteOpening(Roulette roulette);
     }
 }

@@ -2,6 +2,7 @@
 using DataAccess.Entities;
 using DataAccess.Interfaces;
 using System;
+using System.Globalization;
 
 namespace BusinessLayer.BusinessLogic
 {
@@ -12,15 +13,18 @@ namespace BusinessLayer.BusinessLogic
 
         public int NewRoulette(Roulette roulette)
         {
-            roulette.State = true;
+            roulette.State = false;
+
             return _dnaSequenceQuery.CreateRoulette(roulette);
-
         }
 
-        public string RouletteOpening(int idRoulette)
+        public string RouletteOpening(Roulette roulette)
         {
-            throw new NotImplementedException();
-        }
+            roulette.State = true;
+            roulette.Opening = DateTime.Now;
+            bool operationStatus = _dnaSequenceQuery.UpdateOpeningRoulette(roulette);
 
+            return operationStatus ? "exitosa" : "denegada";
+        }
     }
 }
