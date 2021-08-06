@@ -24,11 +24,15 @@ namespace Casino
         {
             services.AddSingleton(Configuration.GetConnectionString("DefaultConnection"));
             #region Register (dependency injection)
-            services.AddScoped<IRouletteLogic, RouletteLogic>();
+            
             services.AddScoped<IRouletteQuery, RouletteQuery>();
+            services.AddScoped<ITypeBetQuery, TypeBetQuery>();
+            services.AddScoped<IRouletteNumberQuery, RouletteNumberQuery>();
+            services.AddScoped<IBetQuery, BetQuery>();
+            services.AddScoped<IRouletteLogic, RouletteLogic>();
             services.AddControllers();
-
             #endregion Register (dependency injection)
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

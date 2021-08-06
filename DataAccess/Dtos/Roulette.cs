@@ -6,8 +6,6 @@ namespace DataAccess.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public DateTime Opening { get; set; }
-        public DateTime Closing { get; set; }
-        public bool State { get; set; }
+        public bool Status { get; set; }
     }
 }

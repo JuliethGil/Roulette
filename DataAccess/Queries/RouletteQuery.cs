@@ -13,7 +13,7 @@ namespace DataAccess.Queries
         {
             using NpgsqlConnection connection = new NpgsqlConnection(conectionstring);
             connection.Open();
-            string sql = $"INSERT INTO public.\"Roulette\" (\"Name\", \"State\") VALUES ('{roulette.Name}', {roulette.State}) RETURNING \"Id\"";
+            string sql = $"INSERT INTO public.\"Roulette\" (\"Name\", \"Status\") VALUES ('{roulette.Name}', {roulette.Status}) RETURNING \"Id\"";
             NpgsqlCommand query = new NpgsqlCommand(sql);
             query.Connection = connection;
             int idRoulette = Convert.ToInt32(query.ExecuteScalar());
@@ -28,7 +28,7 @@ namespace DataAccess.Queries
             {
                 using NpgsqlConnection connection = new NpgsqlConnection(conectionstring);
                 connection.Open();
-                string sql = $"UPDATE public.\"Roulette\" SET \"State\" ={roulette.State}, \"Opening\" ='{roulette.Opening}' WHERE \"Id\" ={roulette.Id};";
+                string sql = $"UPDATE public.\"Roulette\" SET \"Status\" = {roulette.Status} WHERE \"Id\" ={roulette.Id};";
                 NpgsqlCommand query = new NpgsqlCommand(sql);
                 query.Connection = connection;
                 NpgsqlDataReader dataReader = query.ExecuteReader();
@@ -40,6 +40,19 @@ namespace DataAccess.Queries
             {
                 return false;
             }
+        }
+
+        public bool RouletteActive(int idRoulette)
+        {
+            using NpgsqlConnection connection = new NpgsqlConnection(conectionstring);
+            connection.Open();
+            string sql = $"SELECT \"Status\" FROM public.\"Roulette\" WHERE \"Id\" = {idRoulette};";
+            NpgsqlCommand query = new NpgsqlCommand(sql);
+            query.Connection = connection;
+            bool statusRoulette = Convert.ToBoolean(query.ExecuteScalar());
+            connection.Close();
+
+            return statusRoulette;
         }
     }
 }
