@@ -9,6 +9,6 @@ namespace BusinessLayer.Interfaces
         int NewRoulette(Roulette roulette);
         string RouletteOpening(Roulette roulette);
         string Bet(Bet bet);
-        BetResultModel RouletteClose(Roulette roulette);
+        ResultOfBetModel RouletteClose(Roulette roulette);
     }
 }

@@ -65,21 +65,91 @@ namespace BusinessLayer.BusinessLogic
             return _typeBetQuery.SelectTypeBetId(idTypeBet);
         }
 
-        public BetResultModel RouletteClose(Roulette roulette)
+        public ResultOfBetModel RouletteClose(Roulette roulette)
+        {
+            ResultOfBetModel resultOfBetModel = null;
+            if (!_rouletteQuery.RouletteActive(roulette.Id))
+                return resultOfBetModel;
+
+            List<BetInformation> betsInformation = _betQuery.BetInformation(roulette.Id);
+            int winningNumber = SelectWinningNumber();
+            List<BetResultModel> BetsResultModel = GenerateProfit(betsInformation, winningNumber);
+
+            bool operationStatus = ActualizarRuleta(roulette, winningNumber);
+            if (operationStatus)
+            {
+                resultOfBetModel.WinningNumber = winningNumber;
+                resultOfBetModel.Colour = winningNumber % 2 == 0 ? "Rojo" : "Negro";
+                resultOfBetModel.Bets = BetsResultModel;
+            }
+
+            return resultOfBetModel;
+        }
+
+        private bool ActualizarRuleta(Roulette roulette, int winningNumber)
         {
             roulette.Status = false;
-            roulette.WinningNumber = SelectWinningNumber();
-            //bool operationStatus = _rouletteQuery.UpdateRoulette(roulette);
+            roulette.WinningNumber = winningNumber;
 
-            return new BetResultModel();
+            return _rouletteQuery.UpdateRoulette(roulette);
+        }
+
+        private List<BetResultModel> GenerateProfit(List<BetInformation> betsInformation, int winningNumber)
+        {
+            List<BetResultModel> betsResult = new List<BetResultModel>();
+
+            foreach (BetInformation betInformation in betsInformation)
+            {
+                BetResultModel betResultModel = new BetResultModel();
+                betResultModel.BetNumber = betInformation.BetNumber;
+                betResultModel.BetColour = GetColour(betInformation.IBet);
+                betResultModel.MoneyStaked = betInformation.MoneyStaked;
+                betResultModel.EarnedMoney = CalculateProfit(betInformation.IBet, betInformation.BetNumber, betInformation.MoneyStaked, winningNumber);
+                betResultModel.BetStatus = betResultModel.EarnedMoney != null ? "Gano" : "Perdio";
+                betsResult.Add(betResultModel);
+            }
+
+            return betsResult;
+        }
+
+        private string GetColour(int bet)
+        {
+            string colour = string.Empty;
+            if (bet == 2)
+                colour = "Negro";
+            else if (bet == 3)
+                colour = "Rojo";
+
+            return colour;
         }
 
         private int SelectWinningNumber()
         {
             int rouletteRotalNumbers = _rouletteNumberQuery.SelectRouletteNumbers();
             int winningNumber = new Random().Next(0, rouletteRotalNumbers--);
-            
+
             return winningNumber;
+        }
+
+        private decimal? CalculateProfit(int bet, int? betNumber, decimal moneyStaked, int winningNumber)
+        {
+            decimal? gain = null;
+            switch (bet)
+            {
+                case 1:
+                    int number = (int)betNumber;
+                    if (number == winningNumber)
+                        gain = moneyStaked * 5;
+                    break;
+                case 2:
+                case 3:
+                    if (winningNumber % 2 == 0 && bet == 3 || winningNumber % 2 == 1 && bet == 2)
+                        gain = moneyStaked * Convert.ToDecimal(1.8);
+
+                    break;
+            }
+
+            return gain;
         }
     }
 }

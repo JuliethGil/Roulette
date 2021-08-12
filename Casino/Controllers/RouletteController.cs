@@ -8,7 +8,6 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Net.Mime;
-using System.Threading.Tasks;
 
 namespace Casino.Controllers
 {
@@ -97,9 +96,9 @@ namespace Casino.Controllers
             try
             {
                 var objRequest = Mapper.Map<Roulette>(request);
-                BetResultModel betResult = _service.RouletteClose(objRequest);
+                ResultOfBetModel resultOfBet = _service.RouletteClose(objRequest);
 
-                return Ok(betResult);
+                return Ok(resultOfBet);
             }
             catch (Exception ex)
             {

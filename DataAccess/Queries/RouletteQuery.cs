@@ -28,7 +28,7 @@ namespace DataAccess.Queries
             {
                 using NpgsqlConnection connection = new NpgsqlConnection(conectionstring);
                 connection.Open();
-                string sql = $"UPDATE public.\"Roulette\" SET \"Status\" = {roulette.Status} WHERE \"Id\" ={roulette.Id};";
+                string sql = $"UPDATE public.\"Roulette\" SET \"Status\" = {roulette.Status}, \"WinningNumber\" = {roulette.WinningNumber} WHERE \"Id\" ={roulette.Id};";
                 NpgsqlCommand query = new NpgsqlCommand(sql);
                 query.Connection = connection;
                 NpgsqlDataReader dataReader = query.ExecuteReader();
