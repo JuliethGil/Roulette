@@ -22,7 +22,7 @@ namespace DataAccess.Queries
             return idRoulette;
         }
 
-        public bool UpdateOpeningRoulette(Roulette roulette)
+        public bool UpdateRoulette(Roulette roulette)
         {
             try
             {

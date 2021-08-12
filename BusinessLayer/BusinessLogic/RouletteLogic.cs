@@ -1,9 +1,11 @@
-﻿using BusinessLayer.Interfaces;
+﻿using BusinessLayer.Dto;
+using BusinessLayer.Interfaces;
 using DataAccess.Entities;
 using DataAccess.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace BusinessLayer.BusinessLogic
 {
@@ -13,6 +15,7 @@ namespace BusinessLayer.BusinessLogic
         private readonly ITypeBetQuery _typeBetQuery;
         private readonly IRouletteNumberQuery _rouletteNumberQuery;
         private readonly IBetQuery _betQuery;
+
         public RouletteLogic(IRouletteQuery rouletteQuery, ITypeBetQuery typeBetQuery, IRouletteNumberQuery rouletteNumberQuery, IBetQuery betQuery)
         {
             _rouletteQuery = rouletteQuery;
@@ -31,7 +34,7 @@ namespace BusinessLayer.BusinessLogic
         public string RouletteOpening(Roulette roulette)
         {
             roulette.Status = true;
-            bool operationStatus = _rouletteQuery.UpdateOpeningRoulette(roulette);
+            bool operationStatus = _rouletteQuery.UpdateRoulette(roulette);
 
             return operationStatus ? "exitosa" : "denegada";
         }
@@ -60,6 +63,23 @@ namespace BusinessLayer.BusinessLogic
         private bool BetTypeIsValid(int idTypeBet)
         {
             return _typeBetQuery.SelectTypeBetId(idTypeBet);
+        }
+
+        public BetResultModel RouletteClose(Roulette roulette)
+        {
+            roulette.Status = false;
+            roulette.WinningNumber = SelectWinningNumber();
+            //bool operationStatus = _rouletteQuery.UpdateRoulette(roulette);
+
+            return new BetResultModel();
+        }
+
+        private int SelectWinningNumber()
+        {
+            int rouletteRotalNumbers = _rouletteNumberQuery.SelectRouletteNumbers();
+            int winningNumber = new Random().Next(0, rouletteRotalNumbers--);
+            
+            return winningNumber;
         }
     }
 }

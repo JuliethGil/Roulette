@@ -2,6 +2,8 @@
 using DataAccess.Interfaces;
 using Npgsql;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DataAccess.Queries
 {
@@ -20,6 +22,19 @@ namespace DataAccess.Queries
             connection.Close();
 
             return idRouletteNumber;
+        }
+
+        public int SelectRouletteNumbers()
+        {
+            using NpgsqlConnection connection = new NpgsqlConnection(conectionstring);
+            connection.Open();
+            string sql = $"SELECT COUNT(*) FROM public.\"RouletteNumber\";";
+            NpgsqlCommand query = new NpgsqlCommand(sql);
+            query.Connection = connection;
+            int rouletteRotalNumbers = Convert.ToInt32(query.ExecuteScalar());
+            connection.Close();
+
+            return rouletteRotalNumbers;
         }
     }
 }

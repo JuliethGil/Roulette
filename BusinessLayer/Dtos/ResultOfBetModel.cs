@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace Casino.Models
+namespace BusinessLayer.Dto
 {
     public class ResultOfBetModel
     {
         public int WinningNumber { get; set; }
         public string Colour { get; set; }
-        public List<BetResult> Bets { get; set; }
+        public List<BetResultModel> Bets { get; set; }
     }
 }

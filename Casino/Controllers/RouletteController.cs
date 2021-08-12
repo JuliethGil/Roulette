@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessLayer.Dto;
 using BusinessLayer.Interfaces;
 using Casino.Models;
 using DataAccess.Entities;
@@ -7,6 +8,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Net.Mime;
+using System.Threading.Tasks;
 
 namespace Casino.Controllers
 {
@@ -68,7 +70,7 @@ namespace Casino.Controllers
         [DisableRequestSizeLimit]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [Produces(MediaTypeNames.Application.Json, Type = typeof(RouletteCreationModel))]
+        [Produces(MediaTypeNames.Application.Json, Type = typeof(BetModel))]
         public IActionResult Bet([FromHeader, Required] int idUser, [FromBody] BetModel request)
         {
             try
@@ -90,15 +92,16 @@ namespace Casino.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         [Produces(MediaTypeNames.Application.Json, Type = typeof(RouletteUpdateModel))]
-        public IActionResult CloseBets([FromBody] BetUpdateModel request)
+        public IActionResult RouletteClose([FromBody] RouletteUpdateModel request)
         {
             try
             {
-                var objRequest = Mapper.Map<Bet>(request);
+                var objRequest = Mapper.Map<Roulette>(request);
+                BetResultModel betResult = _service.RouletteClose(objRequest);
 
-                return Ok();
+                return Ok(betResult);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return StatusCode((int)HttpStatusCode.Forbidden, null);
             }
