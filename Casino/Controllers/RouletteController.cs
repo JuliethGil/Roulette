@@ -78,7 +78,27 @@ namespace Casino.Controllers
 
                 return Ok(state);
             }
-            catch (Exception ex)
+            catch (Exception)
+            {
+                return StatusCode((int)HttpStatusCode.Forbidden, null);
+            }
+        }
+
+        [Route("closebets")]
+        [HttpPut]
+        [DisableRequestSizeLimit]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Forbidden)]
+        [Produces(MediaTypeNames.Application.Json, Type = typeof(RouletteUpdateModel))]
+        public IActionResult CloseBets([FromBody] BetUpdateModel request)
+        {
+            try
+            {
+                var objRequest = Mapper.Map<Bet>(request);
+
+                return Ok();
+            }
+            catch (Exception)
             {
                 return StatusCode((int)HttpStatusCode.Forbidden, null);
             }

@@ -41,7 +41,7 @@ namespace BusinessLayer.BusinessLogic
             if (bet.BetNumber != null && !IsWithinBetRange(bet.BetNumber.Value))
                 return "El numero apostado no es valido.";
             if (bet.BetNumber != null)
-                bet.IdRouletteNumber = _rouletteNumberQuery.SelectIdRouletteNumber(bet.IdRouletteNumber.Value);
+                bet.IdRouletteNumber = _rouletteNumberQuery.SelectIdRouletteNumber(bet.BetNumber.Value);
             if (!BetTypeIsValid(bet.IdTypeBet))
                 return "El tipo de apuesta no es valido";
             if (!_rouletteQuery.RouletteActive(bet.IdRoulette))
@@ -49,7 +49,7 @@ namespace BusinessLayer.BusinessLogic
             bet.BetTime = DateTime.Now;
             _betQuery.CreateBet(bet);
 
-            return "";
+            return "Creada exitosamente";
         }
 
         private bool IsWithinBetRange(int number)
