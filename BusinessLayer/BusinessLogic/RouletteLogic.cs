@@ -25,14 +25,14 @@ namespace BusinessLayer.BusinessLogic
 
         public int NewRoulette(Roulette roulette)
         {
-            roulette.Status = false;
+            roulette.IsRoulettOpen = false;
 
             return _rouletteQuery.CreateRoulette(roulette);
         }
 
         public string RouletteOpening(Roulette roulette)
         {
-            roulette.Status = true;
+            roulette.IsRoulettOpen = true;
             roulette.OpeningDate = DateTime.Now;
             bool operationStatus = _rouletteQuery.UpdateRoulette(roulette);
 
@@ -98,7 +98,7 @@ namespace BusinessLayer.BusinessLogic
 
         private bool ActualizarRuleta(Roulette roulette, int winningNumber)
         {
-            roulette.Status = false;
+            roulette.IsRoulettOpen = false;
             roulette.WinningNumber = winningNumber;
             roulette.EndingDate = DateTime.Now;
             return _rouletteQuery.UpdateRoulette(roulette);

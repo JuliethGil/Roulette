@@ -14,7 +14,7 @@ namespace DataAccess.Queries
         {
             using NpgsqlConnection connection = new NpgsqlConnection(conectionstring);
             connection.Open();
-            string sql = $"INSERT INTO public.\"Roulette\" (\"Name\", \"Status\") VALUES ('{roulette.Name}', {roulette.Status}) RETURNING \"Id\"";
+            string sql = $"INSERT INTO public.\"Roulette\" (\"Name\", \"IsRoulettOpen\") VALUES ('{roulette.Name}', {roulette.IsRoulettOpen}) RETURNING \"Id\"";
             NpgsqlCommand query = new NpgsqlCommand(sql);
             query.Connection = connection;
             int idRoulette = Convert.ToInt32(query.ExecuteScalar());
@@ -28,14 +28,14 @@ namespace DataAccess.Queries
             try
             {
                 string isOpening = string.Empty;
-                if (roulette.Status)
+                if (roulette.IsRoulettOpen)
                     isOpening = $", \"OpeningDate\" = '{roulette.OpeningDate}'";
                 else
                     isOpening = $", \"EndingDate\" = '{roulette.EndingDate}', \"WinningNumber\" = {roulette.WinningNumber} ";
 
                 using NpgsqlConnection connection = new NpgsqlConnection(conectionstring);
                 connection.Open();
-                string sql = $"UPDATE public.\"Roulette\" SET \"Status\" = {roulette.Status} {isOpening} WHERE \"Id\" ={roulette.Id};";
+                string sql = $"UPDATE public.\"Roulette\" SET \"IsRoulettOpen\" = {roulette.IsRoulettOpen} {isOpening} WHERE \"Id\" ={roulette.Id};";
                 NpgsqlCommand query = new NpgsqlCommand(sql);
                 query.Connection = connection;
                 NpgsqlDataReader dataReader = query.ExecuteReader();
@@ -66,7 +66,7 @@ namespace DataAccess.Queries
         {
             using NpgsqlConnection connection = new NpgsqlConnection(conectionstring);
             connection.Open();
-            string sql = $"SELECT \"Id\", \"Name\", \"Status\", \"WinningNumber\", \"OpeningDate\", \"EndingDate\" FROM public.\"Roulette\";";
+            string sql = $"SELECT \"Id\", \"Name\", \"IsRoulettOpen\", \"WinningNumber\", \"OpeningDate\", \"EndingDate\" FROM public.\"Roulette\";";
             NpgsqlCommand query = new NpgsqlCommand(sql);
             query.Connection = connection;
             NpgsqlDataReader data = query.ExecuteReader();
@@ -76,7 +76,7 @@ namespace DataAccess.Queries
                 Roulette roulette = new Roulette();
                 roulette.Id = Convert.ToInt32(data[0]);
                 if (!data[1].Equals(DBNull.Value)) roulette.Name = data[1].ToString();
-                roulette.Status = Convert.ToBoolean(data[2]);
+                roulette.IsRoulettOpen = Convert.ToBoolean(data[2]);
                 if (!data[3].Equals(DBNull.Value)) roulette.WinningNumber = Convert.ToInt32(data[3]);
                 if (!data[4].Equals(DBNull.Value)) roulette.OpeningDate = Convert.ToDateTime(data[4]);
                 if (!data[5].Equals(DBNull.Value)) roulette.EndingDate = Convert.ToDateTime(data[5]);

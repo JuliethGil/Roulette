@@ -1,7 +1,4 @@
-﻿using DataAccess.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace BusinessLayer.Dtos
 {
@@ -10,7 +7,7 @@ namespace BusinessLayer.Dtos
         public int Id { get; set; }
         public string Name { get; set; }
         public int? WinningNumber { get; set; }
-        public bool Status { get; set; }
+        public bool IsRoulettOpen { get; set; }
         public DateTime? OpeningDate { get; set; }
         public DateTime? EndingDate { get; set; }
     }
