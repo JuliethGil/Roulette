@@ -1,8 +1,11 @@
-﻿using System;
+﻿using DataAccess.Entities;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace DataAccess.Entities
+namespace BusinessLayer.Dtos
 {
-    public class Roulette
+    public class RoulettesDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

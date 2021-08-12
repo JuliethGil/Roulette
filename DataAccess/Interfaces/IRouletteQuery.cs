@@ -1,4 +1,5 @@
 ﻿using DataAccess.Entities;
+using System.Collections.Generic;
 
 namespace DataAccess.Interfaces
 {
@@ -7,5 +8,6 @@ namespace DataAccess.Interfaces
         int CreateRoulette(Roulette roulette);
         bool UpdateRoulette(Roulette roulette);
         bool RouletteStatus(int idRoulette);
+        List<Roulette> GetAllRoulettes();
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace BusinessLayer.Dto
+﻿namespace BusinessLayer.Dtos
 {
     public class BetResultDto
     {

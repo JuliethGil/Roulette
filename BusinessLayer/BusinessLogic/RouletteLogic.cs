@@ -1,11 +1,10 @@
-﻿using BusinessLayer.Dto;
+﻿using AutoMapper;
+using BusinessLayer.Dtos;
 using BusinessLayer.Interfaces;
 using DataAccess.Entities;
 using DataAccess.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Threading.Tasks;
 
 namespace BusinessLayer.BusinessLogic
 {
@@ -56,16 +55,6 @@ namespace BusinessLayer.BusinessLogic
             return "Creada exitosamente";
         }
 
-        private bool IsWithinBetRange(int number)
-        {
-            return (number >= 0) && (number <= 36);
-        }
-
-        private bool BetTypeIsValid(int idTypeBet)
-        {
-            return _typeBetQuery.SelectTypeBetId(idTypeBet);
-        }
-
         public ResultOfBetDto RouletteClose(Roulette roulette)
         {
             ResultOfBetDto resultOfBetModel = null;
@@ -89,6 +78,23 @@ namespace BusinessLayer.BusinessLogic
 
             return resultOfBetModel;
         }
+
+        public List<RoulettesDto> GetAllRoulettes()
+        {
+            List<Roulette> roulettes = _rouletteQuery.GetAllRoulettes();
+
+            return Mapper.Map<List<RoulettesDto>>(roulettes);
+        }
+
+        private bool IsWithinBetRange(int number)
+        {
+            return (number >= 0) && (number <= 36);
+        }
+
+        private bool BetTypeIsValid(int idTypeBet)
+        {
+            return _typeBetQuery.SelectTypeBetId(idTypeBet);
+        }        
 
         private bool ActualizarRuleta(Roulette roulette, int winningNumber)
         {

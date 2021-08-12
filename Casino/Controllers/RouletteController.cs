@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
-using BusinessLayer.Dto;
+using BusinessLayer.Dtos;
 using BusinessLayer.Interfaces;
 using Casino.Models;
 using DataAccess.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Net.Mime;
@@ -102,7 +103,7 @@ namespace Casino.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.Forbidden, null);
+                return StatusCode((int)HttpStatusCode.Forbidden, ex.Message);
             }
         }
 
@@ -115,13 +116,13 @@ namespace Casino.Controllers
         {
             try
             {
-                //ResultOfBetDto resultOfBet = _service.RouletteClose();
+                List<RoulettesDto> roulettes = _service.GetAllRoulettes();
 
-                return Ok();
+                return Ok(roulettes);
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.Forbidden, null);
+                return StatusCode((int)HttpStatusCode.Forbidden, ex.Message);
             }
         }
     }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BusinessLayer.Dto
+namespace BusinessLayer.Dtos
 {
     public class ResultOfBetDto
     {

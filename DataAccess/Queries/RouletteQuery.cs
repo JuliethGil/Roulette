@@ -2,6 +2,7 @@
 using DataAccess.Interfaces;
 using Npgsql;
 using System;
+using System.Collections.Generic;
 
 namespace DataAccess.Queries
 {
@@ -42,7 +43,7 @@ namespace DataAccess.Queries
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -59,6 +60,31 @@ namespace DataAccess.Queries
             connection.Close();
 
             return statusRoulette;
+        }
+
+        public List<Roulette> GetAllRoulettes()
+        {
+            using NpgsqlConnection connection = new NpgsqlConnection(conectionstring);
+            connection.Open();
+            string sql = $"SELECT \"Id\", \"Name\", \"Status\", \"WinningNumber\", \"OpeningDate\", \"EndingDate\" FROM public.\"Roulette\";";
+            NpgsqlCommand query = new NpgsqlCommand(sql);
+            query.Connection = connection;
+            NpgsqlDataReader data = query.ExecuteReader();
+            List<Roulette> roulettes = new List<Roulette>();
+            while (data.Read())
+            {
+                Roulette roulette = new Roulette();
+                roulette.Id = Convert.ToInt32(data[0]);
+                if (!data[1].Equals(DBNull.Value)) roulette.Name = data[1].ToString();
+                roulette.Status = Convert.ToBoolean(data[2]);
+                if (!data[3].Equals(DBNull.Value)) roulette.WinningNumber = Convert.ToInt32(data[3]);
+                if (!data[4].Equals(DBNull.Value)) roulette.OpeningDate = Convert.ToDateTime(data[4]);
+                if (!data[5].Equals(DBNull.Value)) roulette.EndingDate = Convert.ToDateTime(data[5]);
+                roulettes.Add(roulette);
+            }
+            connection.Close();
+
+            return roulettes;
         }
     }
 }

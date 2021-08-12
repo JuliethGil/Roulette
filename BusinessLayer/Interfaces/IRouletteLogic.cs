@@ -1,6 +1,6 @@
-﻿using BusinessLayer.Dto;
+﻿using BusinessLayer.Dtos;
 using DataAccess.Entities;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace BusinessLayer.Interfaces
 {
@@ -10,5 +10,6 @@ namespace BusinessLayer.Interfaces
         string RouletteOpening(Roulette roulette);
         string Bet(Bet bet);
         ResultOfBetDto RouletteClose(Roulette roulette);
+        List<RoulettesDto> GetAllRoulettes();
     }
 }
