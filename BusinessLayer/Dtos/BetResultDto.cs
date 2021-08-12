@@ -1,6 +1,6 @@
 ﻿namespace BusinessLayer.Dto
 {
-    public class BetResultModel
+    public class BetResultDto
     {
         public int? BetNumber { get; set; }
         public string BetColour { get; set; }

@@ -26,9 +26,15 @@ namespace DataAccess.Queries
         {
             try
             {
+                string isOpening = string.Empty;
+                if (roulette.Status)
+                    isOpening = $", \"OpeningDate\" = '{roulette.OpeningDate}'";
+                else
+                    isOpening = $", \"EndingDate\" = '{roulette.EndingDate}', \"WinningNumber\" = {roulette.WinningNumber} ";
+
                 using NpgsqlConnection connection = new NpgsqlConnection(conectionstring);
                 connection.Open();
-                string sql = $"UPDATE public.\"Roulette\" SET \"Status\" = {roulette.Status}, \"WinningNumber\" = {roulette.WinningNumber} WHERE \"Id\" ={roulette.Id};";
+                string sql = $"UPDATE public.\"Roulette\" SET \"Status\" = {roulette.Status} {isOpening} WHERE \"Id\" ={roulette.Id};";
                 NpgsqlCommand query = new NpgsqlCommand(sql);
                 query.Connection = connection;
                 NpgsqlDataReader dataReader = query.ExecuteReader();
@@ -36,13 +42,13 @@ namespace DataAccess.Queries
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }
         }
 
-        public bool RouletteActive(int idRoulette)
+        public bool RouletteStatus(int idRoulette)
         {
             using NpgsqlConnection connection = new NpgsqlConnection(conectionstring);
             connection.Open();

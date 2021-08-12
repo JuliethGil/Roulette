@@ -6,6 +6,6 @@ namespace DataAccess.Interfaces
     {
         int CreateRoulette(Roulette roulette);
         bool UpdateRoulette(Roulette roulette);
-        bool RouletteActive(int idRoulette);
+        bool RouletteStatus(int idRoulette);
     }
 }

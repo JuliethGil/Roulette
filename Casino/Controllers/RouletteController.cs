@@ -96,9 +96,28 @@ namespace Casino.Controllers
             try
             {
                 var objRequest = Mapper.Map<Roulette>(request);
-                ResultOfBetModel resultOfBet = _service.RouletteClose(objRequest);
+                ResultOfBetDto resultOfBet = _service.RouletteClose(objRequest);
 
                 return Ok(resultOfBet);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.Forbidden, null);
+            }
+        }
+
+        [Route("roullettes")]
+        [HttpGet]
+        [DisableRequestSizeLimit]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Forbidden)]
+        public IActionResult GetAllRoulettes()
+        {
+            try
+            {
+                //ResultOfBetDto resultOfBet = _service.RouletteClose();
+
+                return Ok();
             }
             catch (Exception ex)
             {

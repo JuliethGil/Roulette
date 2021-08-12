@@ -34,6 +34,7 @@ namespace BusinessLayer.BusinessLogic
         public string RouletteOpening(Roulette roulette)
         {
             roulette.Status = true;
+            roulette.OpeningDate = DateTime.Now;
             bool operationStatus = _rouletteQuery.UpdateRoulette(roulette);
 
             return operationStatus ? "exitosa" : "denegada";
@@ -47,7 +48,7 @@ namespace BusinessLayer.BusinessLogic
                 bet.IdRouletteNumber = _rouletteNumberQuery.SelectIdRouletteNumber(bet.BetNumber.Value);
             if (!BetTypeIsValid(bet.IdTypeBet))
                 return "El tipo de apuesta no es valido";
-            if (!_rouletteQuery.RouletteActive(bet.IdRoulette))
+            if (!_rouletteQuery.RouletteStatus(bet.IdRoulette))
                 return "La ruleta no se encuentra activa";
             bet.BetTime = DateTime.Now;
             _betQuery.CreateBet(bet);
@@ -65,22 +66,25 @@ namespace BusinessLayer.BusinessLogic
             return _typeBetQuery.SelectTypeBetId(idTypeBet);
         }
 
-        public ResultOfBetModel RouletteClose(Roulette roulette)
+        public ResultOfBetDto RouletteClose(Roulette roulette)
         {
-            ResultOfBetModel resultOfBetModel = null;
-            if (!_rouletteQuery.RouletteActive(roulette.Id))
+            ResultOfBetDto resultOfBetModel = null;
+            if (!_rouletteQuery.RouletteStatus(roulette.Id))
                 return resultOfBetModel;
 
             List<BetInformation> betsInformation = _betQuery.BetInformation(roulette.Id);
             int winningNumber = SelectWinningNumber();
-            List<BetResultModel> BetsResultModel = GenerateProfit(betsInformation, winningNumber);
+            List<BetResultDto> BetsResultModel = GenerateProfit(betsInformation, winningNumber);
 
             bool operationStatus = ActualizarRuleta(roulette, winningNumber);
             if (operationStatus)
             {
-                resultOfBetModel.WinningNumber = winningNumber;
-                resultOfBetModel.Colour = winningNumber % 2 == 0 ? "Rojo" : "Negro";
-                resultOfBetModel.Bets = BetsResultModel;
+                resultOfBetModel = new ResultOfBetDto
+                {
+                    WinningNumber = winningNumber,
+                    Colour = winningNumber % 2 == 0 ? "Rojo" : "Negro",
+                    Bets = BetsResultModel
+                };
             }
 
             return resultOfBetModel;
@@ -90,17 +94,17 @@ namespace BusinessLayer.BusinessLogic
         {
             roulette.Status = false;
             roulette.WinningNumber = winningNumber;
-
+            roulette.EndingDate = DateTime.Now;
             return _rouletteQuery.UpdateRoulette(roulette);
         }
 
-        private List<BetResultModel> GenerateProfit(List<BetInformation> betsInformation, int winningNumber)
+        private List<BetResultDto> GenerateProfit(List<BetInformation> betsInformation, int winningNumber)
         {
-            List<BetResultModel> betsResult = new List<BetResultModel>();
+            List<BetResultDto> betsResult = new List<BetResultDto>();
 
             foreach (BetInformation betInformation in betsInformation)
             {
-                BetResultModel betResultModel = new BetResultModel();
+                BetResultDto betResultModel = new BetResultDto();
                 betResultModel.BetNumber = betInformation.BetNumber;
                 betResultModel.BetColour = GetColour(betInformation.IBet);
                 betResultModel.MoneyStaked = betInformation.MoneyStaked;

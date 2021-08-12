@@ -2,10 +2,10 @@
 
 namespace BusinessLayer.Dto
 {
-    public class ResultOfBetModel
+    public class ResultOfBetDto
     {
         public int WinningNumber { get; set; }
         public string Colour { get; set; }
-        public List<BetResultModel> Bets { get; set; }
+        public List<BetResultDto> Bets { get; set; }
     }
 }
